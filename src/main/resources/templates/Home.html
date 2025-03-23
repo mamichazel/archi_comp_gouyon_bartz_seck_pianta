@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau des vols - Aéroport</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/Styles.css">
+</head>
+<body>
+<div class="container-fluid title-container text-center">
+    <h1 class="title-text">
+        <i class="fas fa-plane-departure"></i> Tableau des Vols
+    </h1>
+</div>
+<div class="container">
+    <table class="table table-dark table-hover flight-table">
+        <thead>
+        <tr>
+            <th>Numéro de Vol</th>
+            <th>Compagnie</th>
+            <th>Départ</th>
+            <th>Statut</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="flight : ${flights}">
+            <td th:text="${flight.numeroVol}"></td>
+            <td th:text="${flight.airline.nom}"></td>
+            <td th:text="${#temporals.format(flight.dateDepart, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="${flight.statut}" class="status" th:classappend="${flight.statut == 'retardé' ? 'delayed' : ''}"></td>
+            <td>
+                <button class="btn btn-info" onclick="openFlightDetailsModal(this)"
+                        th:data-flight-id="${flight.id}"
+                        th:data-numero-vol="${flight.numeroVol}"
+                        th:data-compagnie="${flight.airline.nom}"
+                        th:data-modele="${flight.plane.modele}"
+                        th:data-depart="${#temporals.format(flight.dateDepart, 'dd-MM-yyyy HH:mm')}"
+                        th:data-arrivee="${#temporals.format(flight.dateArrivee, 'dd-MM-yyyy HH:mm')}"
+                        th:data-statut="${flight.statut}">
+                    Détails
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-warning refresh" onclick="location.reload()">Actualiser</button>
+</div>
+<!-- Modal Détails du Vol -->
+<div id="flightDetailsModal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title">Détails du Vol</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Numéro de Vol :</strong> <span id="modalNumeroVol"></span></p>
+                            <p><strong>Compagnie :</strong> <span id="modalCompagnie"></span></p>
+                            <p><strong>Avion :</strong> <span id="modalModele"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Départ :</strong> <span id="modalDepart"></span></p>
+                            <p><strong>Arrivée :</strong> <span id="modalArrivee"></span></p>
+                            <p><strong>Statut :</strong> <span id="modalStatut"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-secondary">
+                <a id="passengerListBtn" class="btn btn-primary" href="#">Voir la Liste des Passagers</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="/Script.js"></script>
+</body>
+</html>

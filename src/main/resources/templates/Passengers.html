@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liste des Passagers - Aéroport</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/Styles.css">
+  <script src="/Script.js"></script>
+</head>
+<body>
+<div class="container-fluid title-container text-center">
+  <h1 class="title-text">
+    <i class="fas fa-users"></i> Passagers du vol <span th:text="${flight.numeroVol}"></span>
+  </h1>
+</div>
+<div class="container">
+  <table class="table table-dark table-hover flight-table">
+    <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="passenger : ${passengers}">
+      <td th:text="${passenger.nom}"></td>
+      <td th:text="${passenger.prenom}"></td>
+      <td>
+        <button class="btn btn-info" th:attr="data-passenger-id=${passenger.id}" onclick="showLuggages(this)">
+          Détails
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <a href="/" class="btn btn-secondary">Retour</a>
+</div>
+<!-- Modal Bagages -->
+<div id="luggageModal" class="modal fade" tabindex="-1" aria-labelledby="luggageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title">Bagages de <span id="modal-passenger-name"></span></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-dark table-striped border-secondary">
+          <thead>
+          <tr>
+            <th>Type</th>
+            <th>Poids (kg)</th>
+          </tr>
+          </thead>
+          <tbody id="modal-luggages-body"></tbody>
+        </table>
+      </div>
+      <div class="modal-footer border-secondary">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
