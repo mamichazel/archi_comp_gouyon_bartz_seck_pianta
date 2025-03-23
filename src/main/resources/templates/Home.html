@@ -15,6 +15,65 @@
     </h1>
 </div>
 <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <button class="btn btn-warning btn-lg refresh d-flex align-items-center" onclick="location.reload()">
+            <i class="fas fa-sync-alt me-2"></i> Actualiser
+        </button>
+        <button type="button" class="btn btn-warning btn-lg d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addFlightModal">
+            <i class="fas fa-plus-circle me-2"></i> Ajouter un Vol
+        </button>
+    </div>
+    <!-- Modal Ajouter Vol-->
+    <div class="modal fade" id="addFlightModal" tabindex="-1" aria-labelledby="addFlightModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header text-light">
+                    <h5 class="modal-title" id="addFlightModalLabel">Ajouter un Vol</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/addFlight}" method="post">
+                        <div class="mb-3">
+                            <label for="numeroVol" class="form-label text-light">Numéro de Vol</label>
+                            <input type="text" id="numeroVol" name="numeroVol" class="form-control bg-dark text-light" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dateDepart" class="form-label text-light">Date de Départ</label>
+                            <input type="datetime-local" id="dateDepart" name="dateDepart" class="form-control bg-dark text-light" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dateArrivee" class="form-label text-light">Date d'Arrivée</label>
+                            <input type="datetime-local" id="dateArrivee" name="dateArrivee" class="form-control bg-dark text-light" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="statut" class="form-label text-light">Statut</label>
+                            <select id="statut" name="statut" class="form-select bg-dark text-light" required>
+                                <option value="prévu">prévu</option>
+                                <option value="retardé">retardé</option>
+                                <option value="annulé">annulé</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="airline" class="form-label text-light">Compagnie Aérienne</label>
+                            <select id="airline" name="airline" class="form-select bg-dark text-light" required>
+                                <option th:each="airline : ${airlines}" th:value="${airline.id}" th:text="${airline.nom}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="plane" class="form-label text-light">Modèle d'Avion</label>
+                            <select id="plane" name="plane" class="form-select bg-dark text-light" required>
+                                <option th:each="plane : ${planes}" th:value="${plane.id}" th:text="${plane.modele}"></option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-warning">Ajouter le Vol</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <table class="table table-dark table-hover flight-table">
         <thead>
         <tr>
@@ -40,41 +99,40 @@
                         th:data-depart="${#temporals.format(flight.dateDepart, 'dd-MM-yyyy HH:mm')}"
                         th:data-arrivee="${#temporals.format(flight.dateArrivee, 'dd-MM-yyyy HH:mm')}"
                         th:data-statut="${flight.statut}">
-                    Détails
+                    <i class="fas fa-list-alt me-2"></i> Détails
                 </button>
             </td>
         </tr>
         </tbody>
     </table>
-    <button class="btn btn-warning refresh" onclick="location.reload()">Actualiser</button>
-</div>
-<!-- Modal Détails du Vol -->
-<div id="flightDetailsModal" class="modal fade" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content bg-dark text-white">
-            <div class="modal-header border-secondary">
-                <h5 class="modal-title">Détails du Vol</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p><strong>Numéro de Vol :</strong> <span id="modalNumeroVol"></span></p>
-                            <p><strong>Compagnie :</strong> <span id="modalCompagnie"></span></p>
-                            <p><strong>Avion :</strong> <span id="modalModele"></span></p>
-                        </div>
-                        <div class="col-md-6">
-                            <p><strong>Départ :</strong> <span id="modalDepart"></span></p>
-                            <p><strong>Arrivée :</strong> <span id="modalArrivee"></span></p>
-                            <p><strong>Statut :</strong> <span id="modalStatut"></span></p>
+    <!-- Modal Détails du Vol -->
+    <div id="flightDetailsModal" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title">Détails du Vol</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Numéro de Vol :</strong> <span id="modalNumeroVol"></span></p>
+                                <p><strong>Compagnie :</strong> <span id="modalCompagnie"></span></p>
+                                <p><strong>Avion :</strong> <span id="modalModele"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Départ :</strong> <span id="modalDepart"></span></p>
+                                <p><strong>Arrivée :</strong> <span id="modalArrivee"></span></p>
+                                <p><strong>Statut :</strong> <span id="modalStatut"></span></p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer border-secondary">
-                <a id="passengerListBtn" class="btn btn-primary" href="#">Voir la Liste des Passagers</a>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <div class="modal-footer border-secondary">
+                    <a id="passengerListBtn" class="btn btn-info" href="#">Voir la Liste des Passagers</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                </div>
             </div>
         </div>
     </div>

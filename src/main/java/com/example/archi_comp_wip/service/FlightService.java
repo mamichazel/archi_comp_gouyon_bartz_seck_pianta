@@ -41,6 +41,10 @@ public class FlightService {
         return flightRepository.save(flight);
     }
 
+    public void saveFlight(Flight flight) {
+        flightRepository.save(flight);
+    }
+
     public void deleteFlight(Long id) {
         flightRepository.deleteById(id);
     }
