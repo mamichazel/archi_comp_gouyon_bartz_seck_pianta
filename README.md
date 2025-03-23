@@ -1,5 +1,9 @@
-Pour initialiser l'application il faut d'abord lancer le Main, il va initialiser la base de données et ces relations (créer un objet par classe). Puis pour ajouter, supprimer, modifier et lire des données en requettes HTTP il faut allez dans le fichier Test.http et exécuter toutes les requetes (Run all request), on peut ensuite voir le resultat de chaque requetes en console.
-Ensuite, se référer au commentaire en haut du fichier Test.http pour tester les requetes Delete
+Pour initialiser l'application, commencez par lancer la classe Main. Celle-ci va automatiquement créer la base de données ainsi que ses relations (en insérant un objet par entité).
 
-Nous avons également réalisé un Front montrant quelque requetes GET, comme l'affichage des Vols, des Passagers et des Bagages : voir [localhost/](http://localhost:8080/)
+Ensuite, pour ajouter, modifier, supprimer ou lire des données via des requêtes HTTP, ouvrez le fichier Test.http et sélectionnez "Run all requests". Les résultats de chaque requête s'affichent dans la console.
+
+Pour tester les requêtes DELETE, veuillez vous référer aux commentaires situés en haut du fichier Test.http.
+
+Enfin, une interface web a également été développée, permettant de visualiser certaines données grâce à des requêtes GET telles que l'affichage des vols, des passagers ou des bagages. Nous avons également fait un formulaire pour ajouter un vol (requete POST) en ManyToMany
+Accédez-y via http://localhost:8080/
 
